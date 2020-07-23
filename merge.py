@@ -2,14 +2,14 @@ import pandas as pd
 
 contact_data = pd.read_csv(
     "./dataset/CONTACT_HISTORY.csv",
-    encoding="unicode_escape",
+    encoding="shift_jis",
     low_memory=False,
     header=0,
     names=["client_id", "contact_type", "contact_date"],
 )
 transfer_data = pd.read_csv(
     "./dataset/IDOU_DATA_ALL.csv",
-    encoding="unicode_escape",
+    encoding="shift_jis",
     header=0,
     names=[
         "policy_no",
@@ -31,7 +31,7 @@ transfer_data = pd.read_csv(
 )
 policy_data = pd.read_csv(
     "./dataset/POLICY.csv",
-    encoding="unicode_escape",
+    encoding="shift_jis",
     header=0,
     names=[
         "client_id",
@@ -90,7 +90,7 @@ policy_data = pd.read_csv(
 )
 policy_last_data = pd.read_csv(
     "./dataset/POLICY_LAST_YEAR.csv",
-    encoding="unicode_escape",
+    encoding="shift_jis",
     header=0,
     names=[
         "client_id",
@@ -156,6 +156,29 @@ policy_two_years = pd.merge(
     right_on=["policy_no", "client_id"],
 )
 
-print(policy_two_years)
+print(policy_data)
 
-policy_two_years.to_csv("policy_two_years.csv")
+# print(contact_data)
+#
+# policy_two_years.to_csv("policy_two_years.csv")
+# contact_data.to_csv("contact.csv")
+# policy_data.to_csv("policy.csv")
+# policy_last_data.to_csv("policy_last.csv")
+# transfer_data.to_csv("transfer.csv")
+
+policy_last_idou = pd.merge(
+    policy_last_data,
+    transfer_data,
+    how="outer",
+    on="policy_no"
+)
+
+policy_idou = pd.merge(
+    policy_data,
+    transfer_data,
+    how="outer",
+    on="policy_no"
+)
+
+policy_last_idou.to_csv("policy_last_idou.csv", index=False, encoding='utf-8')
+policy_idou.to_csv("policy_idou.csv", index=False, encoding='utf-8')
